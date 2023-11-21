@@ -2,3 +2,113 @@ body {
   margin: 0;
   font-family: 'Inter', sans-serif;
 }
+
+.product-card-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.discount-price {
+  font-weight: 600;
+  font-size: 14px;
+  color: #C24B5A;
+  margin-right: 0.5rem;
+}
+
+.original-price {
+  font-weight: 600;
+  font-size: 14px;
+  color: gray;
+  text-decoration: line-through;
+}
+
+.box {
+  display: 'flex';
+  align-items: 'center';
+}
+
+.discount-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-size: 12px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 100px;
+  color: white;
+  background-color: #C24B5A;
+}
+
+.load-more {
+  font-weight: 500;
+  border-radius: 5px;
+  color: white;
+  background-color: #C24B5A;
+  padding: 1rem 1rem;
+  border: none;
+  margin: 0 auto;
+}
+
+.load-more-box {
+  width: fit-content;
+  margin: 6rem auto 0;
+  cursor: pointer;
+}
+
+.quantity-button {
+  border: 1;
+  border-style: solid;
+  font-size: 20px;
+  border-color: #C24B5A;
+  background-color: transparent;
+}
+
+.back {
+  position: absolute;
+  bottom: 3rem;
+  left: 1rem;
+  opacity: 0;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.icon-set {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 10px;
+  opacity: 0;
+}
+
+.product-image:hover .back {
+  animation: appear 0.5s forwards;
+}
+
+.product-image:hover .icon-set {
+  animation: moveUp 0.5s forwards;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes moveUp {
+  0% {
+    opacity: 0;
+    bottom: 0rem;
+  }
+
+  100% {
+    opacity: 1;
+    bottom: 0.75rem;
+  }
+}
