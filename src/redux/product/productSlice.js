@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Initial state
 const initialState = {
-    products: {},
+    products: [],
+    searchedProducts: [],
+    productsOnChart: [],
 };
 
 export const productSlice = createSlice({
@@ -11,8 +13,20 @@ export const productSlice = createSlice({
     reducers: {
         getProductsRequest() { },
         setProducts(state, action) {
-            state.products[action.payload.key] = action.payload.data
-        }
+            state.products = action.payload.data
+        },
+
+        getSearchedProductsRequest() { },
+        setSearchedProducts(state, action) {
+            state.searchedProducts = action.payload.data
+        },
+
+        addToCartRequest() { },
+
+        getProductsOnChartRequest() { },
+        setProductsOnChart(state, action) {
+            state.productsOnChart = action.payload.data
+        },
     },
 });
 
