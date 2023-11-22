@@ -21,6 +21,7 @@ export default function Search() {
     const keyPressHandler = (e) => {
         if (searchParam !== '' && e.key === 'Enter') {
             e.preventDefault();
+            dispatch(productActions.setIsSearched(true))
             search();
         }
     }
@@ -28,6 +29,7 @@ export default function Search() {
     useEffect(() => {
         if (dirtySearch && searchParam === '') {
             search()
+            dispatch(productActions.setIsSearched(false))
         }
     }, [searchParam])
 
@@ -54,7 +56,10 @@ export default function Search() {
             </IconButton>}
             <IconButton id='search-button'
                 type="button"
-                onClick={search}
+                onClick={() => {
+                    dispatch(productActions.setIsSearched(true))
+                    search()
+                }}
                 sx={[
                     {
                         p: '12.5px 50px',

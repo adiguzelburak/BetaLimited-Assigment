@@ -5,8 +5,11 @@ import { productActions } from './productSlice';
 function* getProductsSaga(params) {
     try {
         const searchParam = yield select(state => state.product.searchParam);
+        const isSearched = yield select(state => state.product.isSearched);
 
-        const productsResponse = searchParam ? yield call(productService.getProductsByName, searchParam) : yield call(productService.getProducts);
+        const productsResponse = isSearched
+            ? yield call(productService.getProductsByName, searchParam)
+            : yield call(productService.getProducts);
         const productsCartsResponse = yield call(productService.getProductsOnCart)
         if (productsResponse.status !== 200 || productsCartsResponse.status !== 200) throw new Error('Something went wrong');
 

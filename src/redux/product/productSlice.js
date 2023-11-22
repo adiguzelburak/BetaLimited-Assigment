@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     productsWithQuantities: [],
     searchParam: "",
+    isSearched: false,
 };
 
 export const productSlice = createSlice({
@@ -15,6 +16,9 @@ export const productSlice = createSlice({
         },
         setSearchParam(state, action) {
             state.searchParam = action.payload
+        },
+        setIsSearched(state, action) {
+            state.isSearched = action.payload
         },
 
         getProductsWithQuantitiesRequest() { },
