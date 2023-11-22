@@ -3,32 +3,31 @@ import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { productActions } from '../redux/product/productSlice';
 
-export default function Search({ onSearchHandle }) {
-    const [productName, setProductName] = useState('')
+export default function Search() {
+    const searchParam = useSelector(state => state.product.searchParam)
 
     const dispatch = useDispatch();
 
     const search = () => {
-        dispatch(productActions.getSearchedProductsRequest(productName))
-        onSearchHandle(true);
+        dispatch(productActions.getProductsWithQuantitiesRequest())
     }
 
     const keyPressHandler = (e) => {
-        if (productName !== '' && e.key === 'Enter') {
+        if (searchParam !== '' && e.key === 'Enter') {
             e.preventDefault();
             search();
         }
     }
 
     useEffect(() => {
-        if (productName === '') {
-            onSearchHandle(false)
+        if (searchParam === '') {
+            search()
         }
-    }, [productName])
+    }, [searchParam])
 
 
     return (
@@ -42,13 +41,12 @@ export default function Search({ onSearchHandle }) {
             <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="Searching for..."
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                value={searchParam}
+                onChange={(e) => dispatch(productActions.setSearchParam(e.target.value))}
                 onKeyDown={keyPressHandler}
             />
-            {productName && <IconButton onClick={() => {
-                setProductName('')
-                onSearchHandle(false)
+            {searchParam && <IconButton onClick={() => {
+                dispatch(productActions.setSearchParam(''));
             }} sx={{ p: '0 5px 0 5px' }} aria-label="close">
                 <Cancel />
             </IconButton>}

@@ -15,7 +15,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useDispatch } from 'react-redux'
 import { productActions } from '../redux/product/productSlice';
 
-export default function ProductCard({ img, title, rating, originalPrice, price, discount, id, productQuantity, onChangeHandler }) {
+export default function ProductCard({ img, title, rating, originalPrice, price, discount, id, productQuantity }) {
     const [isDisabled, setIsDisabled] = useState(false);
     const dispatch = useDispatch();
 
@@ -24,7 +24,6 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
         dispatch(productActions.addToCartRequest({
             id: id,
             onSuccess: () => {
-                onChangeHandler()
                 setIsDisabled(false)
             }
         }))
@@ -36,7 +35,6 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
             dispatch(productActions.substractFromCartRequest({
                 id: id,
                 onSuccess: () => {
-                    onChangeHandler()
                     setIsDisabled(false)
                 }
             }))

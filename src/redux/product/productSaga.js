@@ -1,48 +1,31 @@
-import { all, call, put, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest, fork, select } from "redux-saga/effects";
 import productService from "./productService";
 import { productActions } from './productSlice';
 
 function* getProductsSaga() {
     try {
-        const response = yield call(productService.getProducts);
-        if (response.status !== 200) throw new Error('Something went wrong');
+        const searchParam = yield select(state => state.product.searchParam);
 
-        yield put(productActions.setProducts({
-            data: response.data
+        const productsResponse = searchParam ? yield call(productService.getProductsByName, searchParam) : yield call(productService.getProducts);
+        const productsCartsResponse = yield call(productService.getProductsOnCart)
+        if (productsResponse.status !== 200 || productsCartsResponse.status !== 200) throw new Error('Something went wrong');
+
+        const products = productsResponse.data;
+        const productsOnCart = productsCartsResponse.data
+
+        const productsWithQuantities = products.map(product => {
+            const cart = productsOnCart.find(productCart => productCart.productId === product.id);
+
+            if (cart) {
+                return { ...product, productQuantity: cart.quantity };
+            } else {
+                return { ...product, productQuantity: 0 };
+            }
+        });
+
+        yield put(productActions.setProductsWithQuantities({
+            productsWithQuantities,
         }))
-    } catch (e) {
-        console.log('error:', e)
-    }
-}
-
-function* productsOnCartSaga() {
-    try {
-        const response = yield call(productService.getProductsOnCart);
-        if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
-
-        yield put(productActions.setProductsOnCart({
-            data: response.data
-        }))
-
-        yield put(productActions.setProdutcsAddQuantities())
-        yield put(productActions.setSearchedProductsQuantities())
-
-    } catch (e) {
-        console.log('error:', e)
-    }
-}
-
-function* getSearchedProductsSaga({ payload }) {
-    try {
-        const response = yield call(productService.getProductsByName, payload);
-        if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
-
-        yield put(productActions.setSearchedProducts({
-            data: response.data
-        }))
-
-        yield put(productActions.setSearchedProductsQuantities())
-
     } catch (e) {
         console.log('error:', e)
     }
@@ -53,8 +36,7 @@ function* addToCartSaga({ payload: { id, onSuccess, onFailure } }) {
         const response = yield call(productService.addToCart, id);
         if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
 
-        yield put(productActions.setProdutcsAddQuantities())
-        yield put(productActions.setSearchedProductsQuantities())
+        yield fork(getProductsSaga)
 
         if (onSuccess) onSuccess();
     } catch (e) {
@@ -68,8 +50,7 @@ function* substractFromCartSaga({ payload: { id, onSuccess, onFailure } }) {
         const response = yield call(productService.substractFromCart, id);
         if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
 
-        yield put(productActions.setProdutcsAddQuantities())
-        yield put(productActions.setSearchedProductsQuantities())
+        yield fork(getProductsSaga)
 
         if (onSuccess) onSuccess();
     } catch (e) {
@@ -80,10 +61,8 @@ function* substractFromCartSaga({ payload: { id, onSuccess, onFailure } }) {
 
 export default function* rootSaga() {
     yield all([
-        takeLatest(productActions.getProductsRequest.type, getProductsSaga),
-        takeLatest(productActions.getSearchedProductsRequest.type, getSearchedProductsSaga),
+        takeLatest(productActions.getProductsWithQuantitiesRequest.type, getProductsSaga),
         takeLatest(productActions.addToCartRequest.type, addToCartSaga),
-        takeLatest(productActions.getProductsOnCartRequest.type, productsOnCartSaga),
         takeLatest(productActions.substractFromCartRequest.type, substractFromCartSaga),
     ]);
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from '@mui/material/Grid'
 import Search from './search'
 
-export default function Navbar({ onSearchHandle }) {
+export default function Navbar() {
     return (
         <Grid sx={{
             backgroundColor: 'white',
@@ -15,7 +15,7 @@ export default function Navbar({ onSearchHandle }) {
                 margin: '0 auto',
             }}>
                 <img src='./logo-dark.png' alt='logo' className='logo' />
-                <Search onSearchHandle={onSearchHandle} />
+                <Search />
             </Grid>
         </Grid>
 

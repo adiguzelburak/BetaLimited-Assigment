@@ -2,60 +2,24 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Initial state
 const initialState = {
-    products: [],
-    productsOnCart: [],
-    searchedProducts: [],
-    productsFiltred: [],
-    searchedProductsFiltred: [],
+    productsWithQuantities: [],
+    searchParam: "",
 };
 
 export const productSlice = createSlice({
     name: "product",
     initialState,
     reducers: {
-        getProductsRequest() { },
-        setProducts(state, action) {
-            state.products = action.payload.data
+        setProductsWithQuantities(state, action) {
+            state.productsWithQuantities = action.payload.productsWithQuantities;
         },
-        setProdutcsAddQuantities(state) {
-            const filteredArray = state.products.map(product => {
-                const isExist = state.productsOnCart.find(productCart => productCart.productId === product.id);
-
-                if (isExist) {
-                    return { ...product, productQuantity: isExist.quantity };
-                } else {
-                    return { ...product, productQuantity: 0 };
-                }
-            });
-
-            state.productsFiltred = filteredArray
+        setSearchParam(state, action) {
+            state.searchParam = action.payload
         },
 
-        getSearchedProductsRequest() { },
-        setSearchedProducts(state, action) {
-            state.searchedProducts = action.payload.data
-        },
-        setSearchedProductsQuantities(state) {
-            const filteredArray = state.searchedProducts.map(product => {
-                const isExist = state.productsOnCart.find(productCart => productCart.productId === product.id);
-
-                if (isExist) {
-                    return { ...product, productQuantity: isExist.quantity };
-                } else {
-                    return { ...product, productQuantity: 0 };
-                }
-            });
-            state.searchedProductsFiltred = filteredArray
-        },
-
-
+        getProductsWithQuantitiesRequest() { },
         addToCartRequest() { },
         substractFromCartRequest() { },
-
-        getProductsOnCartRequest() { },
-        setProductsOnCart(state, action) {
-            state.productsOnCart = action.payload.data
-        },
     },
 });
 
