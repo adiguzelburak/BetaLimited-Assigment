@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 // Initial state
 const initialState = {
     products: [],
-    searchedProducts: [],
     productsOnCart: [],
+    searchedProducts: [],
     productsFiltred: [],
     searchedProductsFiltred: [],
 };
@@ -17,7 +17,6 @@ export const productSlice = createSlice({
         setProducts(state, action) {
             state.products = action.payload.data
         },
-
         setProdutcsAddQuantities(state) {
             const filteredArray = state.products.map(product => {
                 const isExist = state.productsOnCart.find(productCart => productCart.productId === product.id);
@@ -36,7 +35,6 @@ export const productSlice = createSlice({
         setSearchedProducts(state, action) {
             state.searchedProducts = action.payload.data
         },
-
         setSearchedProductsQuantities(state) {
             const filteredArray = state.searchedProducts.map(product => {
                 const isExist = state.productsOnCart.find(productCart => productCart.productId === product.id);
@@ -49,6 +47,7 @@ export const productSlice = createSlice({
             });
             state.searchedProductsFiltred = filteredArray
         },
+
 
         addToCartRequest() { },
         substractFromCartRequest() { },

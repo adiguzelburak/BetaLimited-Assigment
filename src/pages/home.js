@@ -20,22 +20,10 @@ export default function Home() {
         fetchData();
     }, [])
 
-    const onChangeFetch = () => {
-        fetchData();
-    }
-
-    const onSearchHandle = (handleSearch) => {
-        if (handleSearch) {
-            setIsSearched(true)
-        } else {
-            setIsSearched(false)
-        }
-    }
-
     return (
         <Grid>
-            <Navbar onSearchHandle={(e) => onSearchHandle(e)} />
-            <Grid maxWidth={1280} margin={'0 auto'}>
+            <Navbar onSearchHandle={setIsSearched} />
+            <Grid maxWidth={1280} margin={'3rem auto 0'}>
                 <Grid container>
                     {isSearched
                         ? <Grid container gap={10}>
@@ -50,7 +38,7 @@ export default function Home() {
                                         discount={product.discount}
                                         id={product.id}
                                         productQuantity={product.productQuantity}
-                                        onChangeHandler={() => onChangeFetch()}
+                                        onChangeHandler={fetchData}
                                     />
                                 </Grid>
                             ))}
@@ -67,7 +55,7 @@ export default function Home() {
                                         discount={product.discount}
                                         id={product.id}
                                         productQuantity={product.productQuantity}
-                                        onChangeHandler={() => onChangeFetch()}
+                                        onChangeHandler={fetchData}
                                     />
                                 </Grid>
                             ))}

@@ -4,16 +4,20 @@ import Search from './search'
 
 export default function Navbar({ onSearchHandle }) {
     return (
-        <Grid container sx={{
+        <Grid sx={{
             backgroundColor: 'white',
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            margin: '0 auto 2rem',
-            p: '1rem 0'
+            p: '1rem 0',
         }}>
-            <img src='./logo-dark.png' alt='logo' className='logo' />
-            <Search onSearchHandle={(e) => onSearchHandle(e)} />
+            <Grid maxWidth={1360} container sx={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                margin: '0 auto',
+            }}>
+                <img src='./logo-dark.png' alt='logo' className='logo' />
+                <Search onSearchHandle={onSearchHandle} />
+            </Grid>
         </Grid>
+
     )
 }
