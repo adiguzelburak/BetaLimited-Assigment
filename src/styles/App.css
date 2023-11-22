@@ -122,3 +122,9 @@ body {
 .logo {
   width: 180px;
 }
+
+@media screen and (max-width: 475px) {
+  .logo {
+    margin-bottom: 1rem;
+  }
+}

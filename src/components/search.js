@@ -1,19 +1,36 @@
+import Cancel from '@mui/icons-material/Cancel';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { productActions } from '../redux/product/productSlice';
 
-export default function Search() {
+export default function Search({ onSearchHandle }) {
     const [productName, setProductName] = useState('')
 
     const dispatch = useDispatch();
 
     const search = () => {
         dispatch(productActions.getSearchedProductsRequest(productName))
+        onSearchHandle(true);
     }
+
+    const keyPressHandler = (e) => {
+        if (productName !== '' && e.key === 'Enter') {
+            e.preventDefault();
+            search();
+        }
+    }
+
+    useEffect(() => {
+        if (productName === '') {
+            onSearchHandle(false)
+        }
+    }, [productName])
+
+
     return (
         <Paper
             component="form"
@@ -25,10 +42,20 @@ export default function Search() {
             <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="Searching for..."
+                value={productName}
                 onChange={(e) => setProductName(e.target.value)}
+                onKeyDown={keyPressHandler}
             />
-            <IconButton type="button"
+            {productName && <IconButton onClick={() => {
+                setProductName('')
+                onSearchHandle(false)
+            }} sx={{ p: '0 5px 0 5px' }} aria-label="close">
+                <Cancel />
+            </IconButton>}
+            <IconButton id='search-button'
+                type="button"
                 onClick={search}
+
                 sx={[
                     {
                         p: '12.5px 50px',

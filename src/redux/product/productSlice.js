@@ -5,7 +5,8 @@ const initialState = {
     products: [],
     searchedProducts: [],
     productsOnCart: [],
-    filtredProducts: [],
+    productsFiltred: [],
+    searchedProductsFiltred: [],
 };
 
 export const productSlice = createSlice({
@@ -28,12 +29,25 @@ export const productSlice = createSlice({
                 }
             });
 
-            state.filtredProducts = filteredArray
+            state.productsFiltred = filteredArray
         },
 
         getSearchedProductsRequest() { },
         setSearchedProducts(state, action) {
             state.searchedProducts = action.payload.data
+        },
+
+        setSearchedProductsQuantities(state) {
+            const filteredArray = state.searchedProducts.map(product => {
+                const isExist = state.productsOnCart.find(productCart => productCart.productId === product.id);
+
+                if (isExist) {
+                    return { ...product, productQuantity: isExist.quantity };
+                } else {
+                    return { ...product, productQuantity: 0 };
+                }
+            });
+            state.searchedProductsFiltred = filteredArray
         },
 
         addToCartRequest() { },

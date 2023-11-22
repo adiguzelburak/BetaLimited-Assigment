@@ -25,6 +25,7 @@ function* productsOnCartSaga() {
         }))
 
         yield put(productActions.setProdutcsAddQuantities())
+        yield put(productActions.setSearchedProductsQuantities())
 
     } catch (e) {
         console.log('error:', e)
@@ -39,6 +40,9 @@ function* getSearchedProductsSaga({ payload }) {
         yield put(productActions.setSearchedProducts({
             data: response.data
         }))
+
+        yield put(productActions.setSearchedProductsQuantities())
+
     } catch (e) {
         console.log('error:', e)
     }
@@ -50,6 +54,7 @@ function* addToCartSaga({ payload: { id, onSuccess, onFailure } }) {
         if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
 
         yield put(productActions.setProdutcsAddQuantities())
+        yield put(productActions.setSearchedProductsQuantities())
 
         if (onSuccess) onSuccess();
     } catch (e) {
@@ -64,6 +69,7 @@ function* substractFromCartSaga({ payload: { id, onSuccess, onFailure } }) {
         if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
 
         yield put(productActions.setProdutcsAddQuantities())
+        yield put(productActions.setSearchedProductsQuantities())
 
         if (onSuccess) onSuccess();
     } catch (e) {
