@@ -4,7 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     products: [],
     searchedProducts: [],
-    productsOnChart: [],
+    productsOnCart: [],
+    filtredProducts: [],
 };
 
 export const productSlice = createSlice({
@@ -16,16 +17,31 @@ export const productSlice = createSlice({
             state.products = action.payload.data
         },
 
+        setProdutcsAddQuantities(state) {
+            const filteredArray = state.products.map(product => {
+                const isExist = state.productsOnCart.find(productCart => productCart.productId === product.id);
+
+                if (isExist) {
+                    return { ...product, productQuantity: isExist.quantity };
+                } else {
+                    return { ...product, productQuantity: 0 };
+                }
+            });
+
+            state.filtredProducts = filteredArray
+        },
+
         getSearchedProductsRequest() { },
         setSearchedProducts(state, action) {
             state.searchedProducts = action.payload.data
         },
 
         addToCartRequest() { },
+        substractFromCartRequest() { },
 
-        getProductsOnChartRequest() { },
-        setProductsOnChart(state, action) {
-            state.productsOnChart = action.payload.data
+        getProductsOnCartRequest() { },
+        setProductsOnCart(state, action) {
+            state.productsOnCart = action.payload.data
         },
     },
 });

@@ -8,26 +8,43 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useDispatch } from 'react-redux'
+import { productActions } from '../redux/product/productSlice';
 
-export default function ProductCard({ img, title, rating, originalPrice, price, discount }) {
-    const [starQuantity] = useState(rating && 5 - rating)
-    const [productQuantity, setProductQuantity] = useState(0);
+export default function ProductCard({ img, title, rating, originalPrice, price, discount, id, productQuantity, onChangeHandler }) {
+    const [isDisabled, setIsDisabled] = useState(false);
+    const dispatch = useDispatch();
 
     const incrementQuantity = () => {
-        setProductQuantity(prevQuantity => prevQuantity + 1);
+        setIsDisabled(true);
+        dispatch(productActions.addToCartRequest({
+            id: id,
+            onSuccess: () => {
+                onChangeHandler()
+                setIsDisabled(false)
+            }
+        }))
     }
 
     const decrementQuantity = () => {
+        setIsDisabled(true);
         if (productQuantity >= 1) {
-            setProductQuantity(prevQuantity => prevQuantity - 1);
+            dispatch(productActions.substractFromCartRequest({
+                id: id,
+                onSuccess: () => {
+                    onChangeHandler()
+                    setIsDisabled(false)
+                }
+            }))
         }
     }
     return (
         <Card>
-            <div className='product-image' style={{ backgroundColor: '#EFEFEF', position: 'relative' }}>
+            <div className='product-image'>
                 <div className='discount-badge'>
                     {discount}
                 </div>
@@ -57,8 +74,8 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
                         {Array.from(Array(rating)).map((_, index) => (
                             <StarIcon className='star' sx={{ color: 'yellow' }} alt={index} key={index} />
                         ))}
-                        {starQuantity !== 0 &&
-                            Array.from(Array(starQuantity)).map((_, index) => (
+                        {
+                            Array.from(Array(5 - rating)).map((_, index) => (
                                 <StarBorderIcon sx={{ color: 'gray' }} alt={index} key={index} />
                             ))}
                         <span style={{ color: 'gray' }}>({rating})</span>
@@ -69,9 +86,18 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
                     </CardContent>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {productQuantity !== 0 && <IndeterminateCheckBoxOutlinedIcon onClick={decrementQuantity} sx={{ color: '#C24B5A', cursor: 'pointer' }} />}
-                    {productQuantity !== 0 && <div style={{ textAlign: 'center', margin: '5px 0' }}>{productQuantity}</div>}
-                    <AddBoxOutlinedIcon onClick={incrementQuantity} sx={{ color: '#C24B5A', cursor: 'pointer' }} />
+                    {productQuantity !== 0 &&
+                        <Button disabled={isDisabled} onClick={decrementQuantity}
+                            sx={{ minWidth: 'fit-content', minHeight: 'fit-content' }}>
+                            <IndeterminateCheckBoxOutlinedIcon sx={{ color: '#C24B5A', cursor: 'pointer' }} />
+                        </Button>
+                    }
+                    {productQuantity !== 0 && <div style={{ textAlign: 'center' }}>{productQuantity}</div>}
+                    <Button disabled={isDisabled} onClick={() => incrementQuantity()}
+                        sx={{ minWidth: 'fit-content', minHeight: 'fit-content' }}>
+                        <AddBoxOutlinedIcon sx={{ color: '#C24B5A', cursor: 'pointer' }} />
+                    </Button>
+
                 </div>
             </CardContent>
         </Card>

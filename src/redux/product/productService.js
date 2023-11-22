@@ -2,33 +2,23 @@ import axios from "../../configs/axios";
 
 const productService = {
     getProducts() {
-        return axios.get(
-            "https://linkedin-cv-crawler.beta-limited.workers.dev/interview/products"
-        );
+        return axios.get("products");
     },
 
     getProductsByName(name) {
-        return axios.get(
-            "https://linkedin-cv-crawler.beta-limited.workers.dev/interview/search",
-            {
-                params: { name },
-            }
-        );
+        return axios.get(`search?name=${name}`);
     },
 
-    addToChart(id) {
-        return axios.get(
-            "https://linkedin-cv-crawler.beta-limited.workers.dev/interview/add-to-cart",
-            {
-                params: { id },
-            }
-        );
+    addToCart(id) {
+        return axios.post(`add-to-cart?id=${id}`,);
     },
 
-    getProductsOnChart() {
-        return axios.get(
-            "https://linkedin-cv-crawler.beta-limited.workers.dev/interview/view-cart"
-        );
+    substractFromCart(id) {
+        return axios.post(`subtract-from-cart?id=${id}`);
+    },
+
+    getProductsOnCart() {
+        return axios.get("view-cart");
     },
 };
 

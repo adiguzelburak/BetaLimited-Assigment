@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
+  background-color: #F6F9FC;
 }
 
 .product-card-title {
@@ -83,6 +84,11 @@ body {
   opacity: 0;
 }
 
+.product-image {
+  background-color: #efefef;
+  position: relative;
+}
+
 .product-image:hover .back {
   animation: appear 0.5s forwards;
 }
@@ -111,4 +117,8 @@ body {
     opacity: 1;
     bottom: 0.75rem;
   }
+}
+
+.logo {
+  width: 180px;
 }

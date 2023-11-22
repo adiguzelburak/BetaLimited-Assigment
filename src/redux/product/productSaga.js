@@ -15,6 +15,22 @@ function* getProductsSaga() {
     }
 }
 
+function* productsOnCartSaga() {
+    try {
+        const response = yield call(productService.getProductsOnCart);
+        if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
+
+        yield put(productActions.setProductsOnCart({
+            data: response.data
+        }))
+
+        yield put(productActions.setProdutcsAddQuantities())
+
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
+
 function* getSearchedProductsSaga({ payload }) {
     try {
         const response = yield call(productService.getProductsByName, payload);
@@ -28,24 +44,30 @@ function* getSearchedProductsSaga({ payload }) {
     }
 }
 
-function* addToChartSaga(payload) {
+function* addToCartSaga({ payload: { id, onSuccess, onFailure } }) {
     try {
-        const response = yield call(productService.addToChart, payload.payload);
+        const response = yield call(productService.addToCart, id);
         if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
+
+        yield put(productActions.setProdutcsAddQuantities())
+
+        if (onSuccess) onSuccess();
     } catch (e) {
-        console.log('error:', e)
+        if (onFailure) onFailure(e);
+        console.log('error:', e);
     }
 }
 
-function* productsOnChartSaga() {
+function* substractFromCartSaga({ payload: { id, onSuccess, onFailure } }) {
     try {
-        const response = yield call(productService.getProductsOnChart);
+        const response = yield call(productService.substractFromCart, id);
         if (response.status !== 200) throw new Error('Something went wrong check endpoint.');
 
-        yield put(productActions.setProductsOnChart({
-            data: response.data
-        }))
+        yield put(productActions.setProdutcsAddQuantities())
+
+        if (onSuccess) onSuccess();
     } catch (e) {
+        if (onFailure) onFailure(e);
         console.log('error:', e)
     }
 }
@@ -54,7 +76,8 @@ export default function* rootSaga() {
     yield all([
         takeLatest(productActions.getProductsRequest.type, getProductsSaga),
         takeLatest(productActions.getSearchedProductsRequest.type, getSearchedProductsSaga),
-        takeLatest(productActions.addToCartRequest.type, addToChartSaga),
-        takeLatest(productActions.getProductsOnChartRequest.type, productsOnChartSaga),
+        takeLatest(productActions.addToCartRequest.type, addToCartSaga),
+        takeLatest(productActions.getProductsOnCartRequest.type, productsOnCartSaga),
+        takeLatest(productActions.substractFromCartRequest.type, substractFromCartSaga),
     ]);
 }
