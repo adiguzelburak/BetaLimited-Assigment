@@ -17,6 +17,7 @@ import { productActions } from '../redux/product/productSlice';
 
 export default function ProductCard({ img, title, rating, originalPrice, price, discount, id, productQuantity }) {
     const [isDisabled, setIsDisabled] = useState(false);
+    const [isError, setIsError] = useState(false);
     const dispatch = useDispatch();
 
     const incrementQuantity = () => {
@@ -25,6 +26,9 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
             id: id,
             onSuccess: () => {
                 setIsDisabled(false)
+            },
+            onFailure: () => {
+                setIsError(true)
             }
         }))
     }
@@ -36,6 +40,9 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
                 id: id,
                 onSuccess: () => {
                     setIsDisabled(false)
+                },
+                onFailure: () => {
+                    setIsError(true)
                 }
             }))
         }
@@ -98,6 +105,7 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
 
                 </div>
             </CardContent>
+            {isError && <div className='error-message'>Something went wrong...</div>}
         </Card>
     );
 }

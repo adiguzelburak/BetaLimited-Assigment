@@ -2,7 +2,7 @@ import { all, call, put, takeLatest, fork, select } from "redux-saga/effects";
 import productService from "./productService";
 import { productActions } from './productSlice';
 
-function* getProductsSaga() {
+function* getProductsSaga(params) {
     try {
         const searchParam = yield select(state => state.product.searchParam);
 
@@ -14,10 +14,15 @@ function* getProductsSaga() {
         const productsOnCart = productsCartsResponse.data
 
         const productsWithQuantities = products.map(product => {
-            const cart = productsOnCart.find(productCart => productCart.productId === product.id);
+            if (Array.isArray(productsOnCart)) {
+                const cart = productsOnCart.find(productCart => productCart.productId === product.id);
 
-            if (cart) {
-                return { ...product, productQuantity: cart.quantity };
+                if (cart) {
+                    return { ...product, productQuantity: cart.quantity };
+                } else {
+                    return { ...product, productQuantity: 0 };
+                }
+
             } else {
                 return { ...product, productQuantity: 0 };
             }
@@ -26,7 +31,10 @@ function* getProductsSaga() {
         yield put(productActions.setProductsWithQuantities({
             productsWithQuantities,
         }))
+
+        if (params?.payload?.onSuccess) params?.payload?.onSuccess();
     } catch (e) {
+        if (params?.payload?.onFailure) params?.payload?.onFailure();
         console.log('error:', e)
     }
 }

@@ -123,6 +123,13 @@ body {
   width: 180px;
 }
 
+.error-message {
+  background-color: #C24B5A;
+  color: white;
+  padding: 1rem;
+  margin: 0 auto;
+}
+
 @media screen and (max-width: 475px) {
   .logo {
     margin-bottom: 1rem;

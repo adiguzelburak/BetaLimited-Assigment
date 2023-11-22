@@ -3,17 +3,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productActions } from '../redux/product/productSlice';
 
 export default function Search() {
     const searchParam = useSelector(state => state.product.searchParam)
+    const [dirtySearch, setDirtySearch] = useState(false)
 
     const dispatch = useDispatch();
 
     const search = () => {
         dispatch(productActions.getProductsWithQuantitiesRequest())
+        setDirtySearch(true)
     }
 
     const keyPressHandler = (e) => {
@@ -24,7 +26,7 @@ export default function Search() {
     }
 
     useEffect(() => {
-        if (searchParam === '') {
+        if (dirtySearch && searchParam === '') {
             search()
         }
     }, [searchParam])
@@ -53,7 +55,6 @@ export default function Search() {
             <IconButton id='search-button'
                 type="button"
                 onClick={search}
-
                 sx={[
                     {
                         p: '12.5px 50px',
