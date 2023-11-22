@@ -65,7 +65,7 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
                     alt={title}
                 />
             </div>
-            <CardContent style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+            <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                 <div>
                     <div className='product-card-title'>
                         {title}
@@ -88,13 +88,13 @@ export default function ProductCard({ img, title, rating, originalPrice, price, 
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     {productQuantity !== 0 &&
                         <Button disabled={isDisabled} onClick={decrementQuantity}
-                            sx={{ minWidth: 'fit-content', minHeight: 'fit-content' }}>
+                            sx={{ minWidth: 'fit-content', minHeight: 'fit-content', p: '0px' }}>
                             <IndeterminateCheckBoxOutlinedIcon sx={{ color: '#C24B5A', cursor: 'pointer' }} />
                         </Button>
                     }
                     {productQuantity !== 0 && <div style={{ textAlign: 'center' }}>{productQuantity}</div>}
                     <Button disabled={isDisabled} onClick={() => incrementQuantity()}
-                        sx={{ minWidth: 'fit-content', minHeight: 'fit-content' }}>
+                        sx={{ minWidth: 'fit-content', minHeight: 'fit-content', p: '0px' }}>
                         <AddBoxOutlinedIcon sx={{ color: '#C24B5A', cursor: 'pointer' }} />
                     </Button>
 

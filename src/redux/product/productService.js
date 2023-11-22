@@ -6,7 +6,7 @@ const productService = {
     },
 
     getProductsByName(name) {
-        return axios.get(`search?name=${name}`);
+        return axios.get(`search`, { params: { name } });
     },
 
     addToCart(id) {

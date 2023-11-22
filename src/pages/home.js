@@ -24,8 +24,8 @@ export default function Home() {
         fetchData();
     }
 
-    const onSearchHandle = (handle) => {
-        if (handle) {
+    const onSearchHandle = (handleSearch) => {
+        if (handleSearch) {
             setIsSearched(true)
         } else {
             setIsSearched(false)
@@ -36,11 +36,11 @@ export default function Home() {
         <Grid>
             <Navbar onSearchHandle={(e) => onSearchHandle(e)} />
             <Grid maxWidth={1280} margin={'0 auto'}>
-                <Grid container rowGap={4}>
+                <Grid container>
                     {isSearched
-                        ? <>
+                        ? <Grid container gap={10}>
                             {searchedData?.map(product => (
-                                <Grid container key={product.id} width={'auto'} margin={'0 auto'}>
+                                <Grid container key={product.id} width={'auto'} className='mobile-grid'>
                                     <ProductCard
                                         title={product.name}
                                         img={product.image}
@@ -54,10 +54,10 @@ export default function Home() {
                                     />
                                 </Grid>
                             ))}
-                        </>
-                        : <>
+                        </Grid>
+                        : <Grid container gap={10} >
                             {productData?.map(product => (
-                                <Grid container key={product.id} width={'auto'} margin={'0 auto'}>
+                                <Grid container key={product.id} width={'auto'} m={'0 auto'}>
                                     <ProductCard
                                         title={product.name}
                                         img={product.image}
@@ -71,7 +71,7 @@ export default function Home() {
                                     />
                                 </Grid>
                             ))}
-                        </>
+                        </Grid>
                     }
 
 

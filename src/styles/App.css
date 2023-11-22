@@ -127,4 +127,8 @@ body {
   .logo {
     margin-bottom: 1rem;
   }
+
+  .mobile-grid {
+    margin: 0 auto;
+  }
 }
